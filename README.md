@@ -8,3 +8,5 @@ Atividade - Criar os endpoint necessários para a interface de login
 
 3 - Os dados devem ser listados de forma static
 
+4 -  Add um readme de uso
+
