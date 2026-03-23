@@ -1,43 +1,37 @@
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+from flask import Flask,render_template, request, redirect, url_for, abort
+from flask_cors import CORS
 import os
 
-app = FastAPI()
+app = Flask(__name__, static_folder='static', template_folder='static') 
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-static = Jinja2Templates(directory="static")
-
-urls_permitidas = [
+urls = [
     "http://localhost:5500",
-    "http://127.0.0.1:5500"
+    "http://127.0.0.1:5000"
 ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=urls_permitidas,          
-    allow_credentials=True,
-    allow_methods=["*"],            
-    allow_headers=["*"],    
-)
+CORS(app, origins=urls)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-@app.get("/")
+@app.route('/')
 def hello():
-    return "Hello world"
+    return "Hello World"
 
-@app.get("/home")
-async def home(request):
-    return static.TemplateResponse("home.html", {"request":request})
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
-@app.post("/login")
-def login(username:str=Form(...), password:str=Form(...)):
-    
-    if(username != "admin" and password != 123456):
-        return HTMLResponse(status_code=404)
-    
-    return RedirectResponse(url="/static/home.html", status_code=200)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
 
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username == "admin" and password == "123456":
+            return redirect(url_for('home'))
+        
+        abort(404)
+
+    return render_template('login.html')
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
