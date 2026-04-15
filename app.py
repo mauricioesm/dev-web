@@ -1,5 +1,6 @@
 from flask_login import *
 from flask import *
+from flask_mail import Mail, Message
 from models.usuario_models import Usuario
 from extensions import db, login_manager
 import secrets
@@ -24,6 +25,7 @@ app.config["APP_RUN_ID"] = secrets.token_hex(16)
 # login_manager = LoginManager()
 db.init_app(app)
 login_manager.init_app(app)
+mail = Mail(app)
 
 
 
@@ -54,6 +56,39 @@ def logout():
     session.clear() # Limpa os dados da sessão (incluindo o seu app_run_id)
     flash("Você saiu da conta.", "info")
     return redirect(url_for("login"))
+
+@app.route("/esqueceu-senha", methods=["GET", "POST"])
+def esqueceu_senha():
+    if request.method == "POST":
+        email = request.form.get("email")
+        user = Usuario.query.filter_by(email=email).first()
+        if user:
+            token = user.get_reset_token()
+            db.session.commit()
+            link = url_for("redefinir_senha", token=token, _external=True)
+            msg = Message("Redefinir Senha", recipients=[email],
+                         html=f"<a href='{link}'>Clique aqui para redefinir</a>")
+            mail.send(msg)
+            flash("Email enviado!", "success")
+        else:
+            flash("Email não encontrado", "warning")
+        return redirect(url_for("login"))
+    return render_template("esqueceu_senha.html")
+
+@app.route("/redefinir-senha/<token>", methods=["GET", "POST"])
+def redefinir_senha(token):
+    user = Usuario.query.filter_by(reset_token=token).first()
+    if not user or not user.verify_reset_token(token):
+        flash("Link inválido ou expirado", "danger")
+        return redirect(url_for("login"))
+    
+    if request.method == "POST":
+        user.set_password(request.form.get("senha"))
+        user.reset_token = None
+        db.session.commit()
+        flash("Senha redefinida!", "success")
+        return redirect(url_for("login"))
+    return render_template("redefinir_senha.html")
 
 @login_manager.user_loader
 def load_user(user_id):

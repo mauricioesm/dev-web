@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Redefinir Senha</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body class="login-page">
+    <main class="login-card">
+        <h1>Redefinir Senha</h1>
+        <form method="POST">
+            <div class="field">
+                <label for="senha">Nova Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+            <button type="submit">Redefinir</button>
+        </form>
+    </main>
+</body>
+</html>
