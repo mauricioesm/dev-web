@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_login import login_required, current_user, login_user
 from pathlib import Path
 import secrets
-
+from extensions import db, login_manager, mail
+from flask_mail import Message
 from config import Config
 from extensions import db, login_manager
 from models.usuario_models import Usuario
@@ -90,3 +91,64 @@ with app.app_context():
 
         db.session.add(master)
         db.session.commit()
+
+
+        from extensions import db, login_manager, mail
+
+mail.init_app(app)
+from itsdangerous import URLSafeTimedSerializer
+
+def generate_reset_token(user_email):
+    serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+    return serializer.dumps(user_email, salt="reset-password")
+
+
+def verify_reset_token(token, expiration=3600):
+    serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+    try:
+        email = serializer.loads(token, salt="reset-password", max_age=expiration)
+    except:
+        return None
+    return email
+
+@app.route("/reset-password/<token>", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "GET":
+        return render_template("auth/forgot_password.html")
+
+    email = request.form.get("email")
+    user = Usuario.query.filter_by(email=email).first()
+
+    if user:
+        token = generate_reset_token(user.email)
+
+        reset_link = url_for("reset_password", token=token, _external=True)
+
+        msg = Message("Redefinir senha", recipients=[user.email])
+        msg.body = f"Acesse o link para redefinir sua senha: {reset_link}"
+
+        mail.send(msg)
+
+    flash("Se o email existir, você receberá instruções.")
+    return redirect(url_for("login"))
+
+@app.route("/reset-password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    email = verify_reset_token(token)
+
+    if not email:
+        flash("Token inválido ou expirado")
+        return redirect(url_for("login"))
+
+    user = Usuario.query.filter_by(email=email).first()
+
+    if request.method == "GET":
+        return render_template("auth/reset_password.html")
+
+    password = request.form.get("password")
+
+    user.set_password(password)
+    db.session.commit()
+
+    flash("Senha atualizada com sucesso")
+    return redirect(url_for("login"))
