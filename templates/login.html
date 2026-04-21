@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="/templates/style.css">
 </head>
 <body class="login-page">
     <main class="login-card">
         <h1>Entrar</h1>
         <p class="subtitle">Digite seu usuario e sua senha.</p>
 
-        <form action="/login" method="POST">
+        <form action="{{ url_for('auth_login.login') }}" method="POST">
             <div class="field">
                 <label for="username">Usuario</label>
                 <input id="username" name="username" type="text" required>
@@ -22,9 +22,13 @@
                 <input id="password" name="password" type="password" required>
             </div>
 
-            <button type="submit">Entrar</button>
-        </form>
+            <div class="field">
+                <a href="{{url_for('auth_login.esqueci_senha')}}" class="btn-link">Esqueceu a senha? </a>
+            </div>
 
+        </form>
+        
+        <button type="submit">Entrar</button>
         <p class="hint">Teste: admin / 123456</p>
     </main>
 </body>
