@@ -37,7 +37,7 @@
             <span class="nav-label">Dashboard</span>
           </a>
          
-          {% if current_user.funcao in ["master", "coordenador", "coordenacao"] %}
+          {% if current_user.funcao.lower() in ["master", "coordenador", "coordenacao", "direcao", "administrativo"] %}
             <a href="/users" class="{% if request.path.startswith('/users') %}active{% endif %}">
               <span class="nav-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none">

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Usuário - SELOEDU{% endblock %}
+
+{% block content %}
+  <h2>Editar Usuário: {{ usuario.nome }}</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('usuario.editar', id=usuario.id) }}">
+    {{ form.hidden_tag() }}
+    
+    <div>
+      {{ form.name.label }}
+      {{ form.name(size=50) }}
+      {% if form.name.errors %}
+        <ul>
+          {% for error in form.name.errors %}
+            <li style="color: red;">{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.email.label }}
+      {{ form.email(size=50) }}
+      {% if form.email.errors %}
+        <ul>
+          {% for error in form.email.errors %}
+            <li style="color: red;">{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.password.label }} (deixe em branco para manter a senha atual)
+      {{ form.password(size=50) }}
+      {% if form.password.errors %}
+        <ul>
+          {% for error in form.password.errors %}
+            <li style="color: red;">{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.role.label }}
+      {{ form.role() }}
+      {% if form.role.errors %}
+        <ul>
+          {% for error in form.role.errors %}
+            <li style="color: red;">{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.submit(value="Atualizar usuário") }}
+      <a href="{{ url_for('usuario.detalhes', id=usuario.id) }}">Cancelar</a>
+    </div>
+  </form>
+
+  <hr />
+  <h3>Zona de Perigo</h3>
+  <form method="POST" action="{{ url_for('usuario.deletar', id=usuario.id) }}" style="display:inline;">
+    <button type="submit" onclick="return confirm('Tem certeza que deseja deletar este usuário?')" style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer;">
+      Deletar Usuário
+    </button>
+  </form>
+{% endblock %}

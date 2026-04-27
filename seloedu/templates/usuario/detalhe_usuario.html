@@ -4,12 +4,28 @@
 
 {% block content %}
   <h2>Detalhes do Usuário</h2>
-  <p><strong>ID:</strong> {{ usuario.id }}</p>
-  <p><strong>Nome:</strong> {{ usuario.nome }}</p>
-  <p><strong>Email:</strong> {{ usuario.email }}</p>
-  <p><strong>Papel:</strong> {{ usuario.funcao }}</p>
+  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 
-  <p>
-    <a href="{{ url_for('usuario.listar') }}">Voltar</a>
-  </p>
+  <div style="border: 1px solid #ccc; padding: 20px; margin: 20px 0; border-radius: 4px;">
+    <p><strong>ID:</strong> {{ usuario.id }}</p>
+    <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+    <p><strong>Email:</strong> {{ usuario.email }}</p>
+    <p><strong>Papel:</strong> {{ usuario.funcao }}</p>
+  </div>
+
+  <div style="margin: 20px 0;">
+    <a href="{{ url_for('usuario.editar', id=usuario.id) }}" style="margin-right: 10px; padding: 8px 16px; background-color: #28a745; color: white; text-decoration: none; border-radius: 4px;">
+      Editar
+    </a>
+    <a href="{{ url_for('usuario.listar') }}" style="padding: 8px 16px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px;">
+      Voltar
+    </a>
+  </div>
 {% endblock %}
