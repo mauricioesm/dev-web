@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Usuários - SELOEDU{% endblock %}
+
+{% block content %}
+  <h2>Usuários</h2>
+
+  {% if usuarios %}
+    <table border="1" cellpadding="6">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Papel</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for usuario in usuarios %}
+          <tr>
+            <td>{{ usuario.id }}</td>
+            <td><a href="{{ url_for('usuario.detalhes', id=usuario.id) }}">{{ usuario.nome }}</a></td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.funcao }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Nenhum usuário cadastrado.</p>
+  {% endif %}
+{% endblock %}
