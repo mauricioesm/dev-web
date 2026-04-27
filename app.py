@@ -1,17 +1,29 @@
-from flask import Flask
-from flask import render_template
-app = Flask(__name__)  
-@app.route("/")
-def hello_World():
-    return "<p>Hello, World!</p>"
+from fastapi import FastAPI
 
-@app.route("/index/")
-@app.route("/index/<name>")
-def index(name=None):
-    return render_template("index.html", person=name)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+app = FastAPI()
 
 
-    
+@app.get("/ListarTodosOsAlunos")
+def listar_alunos():
+    return alunos 
+
+
+@app.get("/alunos")
+def remover_alunos(aluno_id: int):
+    for aluno in alunos:
+        if aluno["Sexo"] == "M":
+            alunos.remove(aluno)
+            return {"message": f"Aluno com id {aluno_id} removido com sucesso."}
+    return {"message": f"Aluno com id {aluno_id} não encontrado."}
+
+@app.post("/alunos")
+def adicionar_aluno(id: int, nome: str, idade: int, Sexo: str):
+    novo_aluno = {"id": id, "nome": nome, "idade": idade, "Sexo": Sexo}
+    alunos.append(novo_aluno)
+    return {"message": f"Aluno {nome} adicionado com sucesso."}
+
+#Alunos
+alunos = [
+    {"id": 1, "nome": "Pedro", "idade": 99, "Sexo": "F"},
+    {"id": 2, "nome": "Ana", "idade": 22, "Sexo": "M"}
+]
