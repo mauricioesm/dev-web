@@ -25,6 +25,9 @@
           </tr>
         {% endfor %}
       </tbody>
+      <p>
+      <a href="{{ url_for('usuario.criar') }}">Criar</a>
+    </p>
     </table>
   {% else %}
     <p>Nenhum usuário cadastrado.</p>

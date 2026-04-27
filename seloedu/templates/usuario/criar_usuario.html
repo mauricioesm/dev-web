@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar</title>
+</head>
+<body>
+
+    <div>
+        <form action="{{ url_for('usuario.criar', usuario=usuario) }}" method="post">
+            <label for="">Nome</label>
+            <input type="text" name="email" id="email">
+            <label for="">Email</label>
+            <input type="text" name="nome" id="nome">
+            <label for="">Senha</label>
+            <input type="text" name="senha" id="senha">
+            <label for="">Função</label>
+            <input type="text" name="funcao" id="funcao">
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</body>
+</html>
