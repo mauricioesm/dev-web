@@ -1,0 +1,179 @@
+{% extends "base.html" %} {% block title %}Usuário #{{ usuario.id }} - SELOEDU{%
+endblock %} {% block content %}
+<div class="detalhe-container">
+  <div class="header-section">
+    <h2>Detalhes do Usuário</h2>
+    <div class="actions">
+      <a
+        href="{{ url_for('usuario.editar', id=usuario.id) }}"
+        class="btn btn-info"
+        >Editar</a
+      >
+      <form
+        method="POST"
+        action="{{ url_for('usuario.deletar', id=usuario.id) }}"
+        style="display: inline"
+      >
+        <button
+          type="submit"
+          class="btn btn-danger"
+          onclick="
+            return confirm('Tem certeza que deseja deletar este usuário?');
+          "
+        >
+          Deletar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-item">
+      <label>ID:</label>
+      <span>{{ usuario.id }}</span>
+    </div>
+
+    <div class="info-item">
+      <label>Nome:</label>
+      <span>{{ usuario.nome }}</span>
+    </div>
+
+    <div class="info-item">
+      <label>Email:</label>
+      <span>{{ usuario.email }}</span>
+    </div>
+
+    <div class="info-item">
+      <label>Perfil:</label>
+      <span>{{ usuario.funcao }}</span>
+    </div>
+
+    <div class="info-item">
+      <label>Status:</label>
+      <span
+        class="badge {% if usuario.status == 'Ativo' %}badge-success{% else %}badge-danger{% endif %}"
+      >
+        {{ usuario.status }}
+      </span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <a href="{{ url_for('usuario.listar') }}" class="btn btn-secondary"
+      >← Voltar para Lista</a
+    >
+  </div>
+</div>
+
+<style>
+  .detalhe-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .info-section {
+    margin-bottom: 30px;
+  }
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: white;
+    margin-bottom: 8px;
+    border-radius: 3px;
+  }
+
+  .info-item label {
+    font-weight: bold;
+    color: #333;
+    min-width: 120px;
+  }
+
+  .info-item span {
+    color: #666;
+    text-align: right;
+  }
+
+  .nav-section {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-block;
+    transition: background-color 0.3s;
+  }
+
+  .btn-info {
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  .btn-info:hover {
+    background-color: #138496;
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background-color: #c82333;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: #545b62;
+  }
+
+  .badge {
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .badge-success {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .badge-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+</style>
+{% endblock %}
