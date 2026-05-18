@@ -18,17 +18,6 @@ class Config:
     MAIL_PASSWORD = ""
     MAIL_DEFAULT_SENDER = "reset_password@seloedu"
 
-
-
-
-    
     UPLOAD_FOLDER = 'static/uploads'
     THUMBNAIL_SIZE = (200, 200)
-    
-    MAIL_SERVER = 'localhost'
-    MAIL_PORT = 1025
-    MAIL_USE_TLS = False
-    MAIL_USERNAME = ""
-    MAIL_PASSWORD = ""
-    MAIL_DEFAULT_SENDER = "reset_password@seloedu"
     
