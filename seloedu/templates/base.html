@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}SELOEDU{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
+  </head>
+  <body>
+    {% set show_sidebar = current_user.is_authenticated %}
+    <div class="app-shell{% if not show_sidebar %} public-shell{% endif %}">
+      {% if show_sidebar %}
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-mark">S</div>
+          <div>
+            <div class="brand-title">SELOEDU</div>
+            <div class="brand-subtitle">Painel administrativo</div>
+          </div>
+          <button class="sidebar-toggle" type="button" aria-label="Encolher menu">
+            ☰
+          </button>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/dashboard" class="{% if request.path.startswith('/dashboard') %}active{% endif %}">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h7v7H4V4Zm9 0h7v4h-7V4Zm0 6h7v10h-7V10Zm-9 3h7v7H4v-7Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+         
+          {% if current_user.funcao in ["master", "coordenador", "coordenacao"] %}
+            <a href="/users" class="{% if request.path.startswith('/users') %}active{% endif %}">
+              <span class="nav-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 11a3 3 0 1 0-0.001-6A3 3 0 0 0 9 11Z" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M2.5 20a6.5 6.5 0 0 1 13 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M16 8h5M18.5 5.5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="nav-label">Usuários</span>
+            </a>
+           
+          {% endif %}
+        </nav>
+        <details class="profile-card profile-menu">
+          <summary class="profile-summary">
+            <div class="profile-avatar">S</div>
+            <div class="profile-meta">
+              <div class="profile-name">{{ current_user.nome }}</div>
+              <div class="profile-email">{{ current_user.email }}</div>
+            </div>
+            <span class="profile-caret">▾</span>
+          </summary>
+          <div class="profile-dropdown">
+            <a href="#" class="profile-item">
+              <span class="profile-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 12a4 4 0 1 0-0.001-8A4 4 0 0 0 12 12Z" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M4 20a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+              Perfil
+            </a>
+            <a href="#" class="profile-item">
+              <span class="profile-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M12 14v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+              Atualizar senha
+            </a>
+            <a href="{{ url_for('auth.logout') }}" class="profile-item">
+              <span class="profile-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M7 6.5a7 7 0 1 0 10 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+              Encerrar sessão
+            </a>
+          </div>
+        </details>
+        <div class="sidebar-footer"></div>
+      </aside>
+      {% endif %}
+
+      <div class="content">
+        <main class="container content-inner">
+          {% block content %}{% endblock %}
+        </main>
+        <footer class="footer container">
+          Copyright © 2025 SELOEDU · Plataforma de Coordenação Pedagógica
+        </footer>
+      </div>
+    </div>
+    {% if show_sidebar %}
+    <script>
+      const toggle = document.querySelector(".sidebar-toggle");
+      const body = document.body;
+      if (toggle) {
+        toggle.addEventListener("click", () => {
+          body.classList.toggle("sidebar-collapsed");
+          localStorage.setItem("sidebar-collapsed", body.classList.contains("sidebar-collapsed") ? "1" : "0");
+        });
+      }
+      if (localStorage.getItem("sidebar-collapsed") === "1") {
+        body.classList.add("sidebar-collapsed");
+      }
+    </script>
+    {% endif %}
+  </body>
+</html>

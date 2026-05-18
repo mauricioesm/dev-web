@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Login - SELOEDU{% endblock %}
+{% block content %}
+<div class="login-wrapper">
+    <div class="login-card">
+        <h1>SELOEDU</h1>
+        <p>Use seu e-mail e senha para acessar o painel.</p>
+
+        <form method="POST" class="auth-form">
+            <div class="input-group">
+                <label for="email">E-mail</label>
+                <input id="email" type="email" name="email" value="{{ email or '' }}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input id="password" type="password" name="password" required>
+            </div>
+
+            <button type="submit" class="primary-btn full-width">Entrar</button>
+        </form>
+
+        {% if error %}
+        <p class="message danger">{{ error }}</p>
+        {% endif %}
+
+        <a class="link-btn" href="{{ url_for('auth.forgot_password') }}">Esqueci minha senha</a>
+    </div>
+</div>
+{% endblock %}
