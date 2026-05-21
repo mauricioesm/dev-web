@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Funcionário #{{ usuario.id }} - SELOEDU{% endblock %}
+
+{% block content %}
+  <h2>Detalhes do Funcionário</h2>
+  <p><strong>ID:</strong> {{ funcionario.id }}</p>
+  <p><strong>Nome:</strong> {{ funcionario.nome }}</p>
+  <p><strong>Email:</strong> {{ funcionario.email }}</p>
+  <p><strong>Função:</strong> {{ funcionario.funcao }}</p>
+
+  <p>
+    <a href="{{ url_for('funcionario.listar') }}">Voltar</a>
+  </p>
+
+  <p>
+    <a href="{{ url_for('funcionario.modificar', id=funcionario.id) }}"> Modificar </a>
+  </p>
+
+  <p>
+    <a href="{{ url_for('funcionario.deletar', id=funcionario.id) }}"> Deletar </a>
+  </p>
+
+  
+{% endblock %}

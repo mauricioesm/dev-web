@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Usuario</title>
+</head>
+<body>
+    <div>
+        <form action="{{url_for('funcionario.modificar', id=id_funcionario)}}" method="POST">
+            <label for="">Nome</label>
+            <input type="text" name="nome" id="nome" value="{{funcionario.nome}}">
+            <label for="">Email</label>
+            <input type="text" name="email" id="email" value="{{funcionario.email}}">
+            <label for="">Função</label>
+            <input type="text" name="funcao" id="funcao" value="{{funcionario.funcao}}">
+            <button type="submit">Salvar</button>
+        </form>
+    </div>
+</body>
+</html>

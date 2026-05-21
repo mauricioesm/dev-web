@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Turma - SELOEDU{% endblock %}
+
+{% block content %}
+  <h2>Turma</h2>
+
+  {% if turmas %}
+    <table border="1" cellpadding="6">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Quantidade de funcionarios</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        {% for turma in turmas %}
+          <tr>
+            <td>{{ turma.id_turma }}</td>
+            <td>
+              <a href="{{ url_for('turma.detalhes', id=turma.id_turma) }}">
+                {{ turma.qtd_funcionarios }}
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table> <p style="margin-top: 15px;">
+      <a href="{{ url_for('turma.criar') }}" class="btn btn-primary">Criar Nova Turma</a>
+    </p>
+
+  {% else %}
+    <p>Nenhuma turma cadastrada.</p>
+    <p>
+      <a href="{{ url_for('turma.criar') }}">Criar Nova Turma</a>
+    </p>
+  {% endif %}
+{% endblock %}

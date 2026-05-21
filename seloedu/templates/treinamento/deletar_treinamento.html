@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deletar</title>
+</head>
+<body>
+    <div>
+        <form action="{{ url_for('treinamento.deletar', id=id_treinamento) }}", method="POST">
+            <label for="">Id do treinamento</label>
+            <input type="number" name="id_treinamento" id="id_treinamento">
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</body>
+</html>

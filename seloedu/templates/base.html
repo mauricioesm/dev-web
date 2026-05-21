@@ -50,6 +50,49 @@
             </a>
            
           {% endif %}
+
+          {% if current_user.funcao in ["master", "coordenador", "coordenacao"] %}
+            <a href="/funcionario" class="{% if request.path.startswith('/funcionarios') %}active{% endif %}">
+              <span class="nav-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 11a3 3 0 1 0-0.001-6A3 3 0 0 0 9 11Z" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M2.5 20a6.5 6.5 0 0 1 13 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M16 8h5M18.5 5.5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="nav-label">Funcionarios</span>
+            </a>
+           
+          {% endif %}
+          
+          {% if current_user.funcao in ["master", "coordenador", "coordenacao"] %}
+            <a href="/treinamentos" class="{% if request.path.startswith('/treinamentos') %}active{% endif %}">
+              <span class="nav-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 11a3 3 0 1 0-0.001-6A3 3 0 0 0 9 11Z" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M2.5 20a6.5 6.5 0 0 1 13 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M16 8h5M18.5 5.5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="nav-label">Treinamentos</span>
+            </a>
+           
+          {% endif %}
+
+          {% if current_user.funcao in ["master", "coordenador", "coordenacao"] %}
+            <a href="/turmas" class="{% if request.path.startswith('/turmas') %}active{% endif %}">
+              <span class="nav-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 11a3 3 0 1 0-0.001-6A3 3 0 0 0 9 11Z" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M2.5 20a6.5 6.5 0 0 1 13 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M16 8h5M18.5 5.5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="nav-label">Turmas</span>
+            </a>
+           
+          {% endif %}
+
         </nav>
         <details class="profile-card profile-menu">
           <summary class="profile-summary">

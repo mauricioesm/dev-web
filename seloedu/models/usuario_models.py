@@ -12,6 +12,10 @@ class Usuario(db.Model, UserMixin):
     senha_hash  = db.Column(db.String(255), nullable=False)
     funcao      = db.Column(db.String(50) , nullable=False, default="coordenador")
 
+    perfil = db.relationship(
+        "Perfil",
+        back_populates="usuario"
+    )
     def set_password(self, password):
         self.senha_hash = generate_password_hash(password)
 

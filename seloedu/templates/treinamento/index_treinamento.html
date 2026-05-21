@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Treinamentos - SELOEDU{% endblock %}
+
+{% block content %}
+  <h2>Treinamentos</h2>
+
+  {% if treinamentos %}
+    <table border="1" cellpadding="6">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Disciplina</th>
+          <th>Carga Horaria</th>
+          <th>Capacidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for treinamento in treinamentos %}
+          <tr>
+            <td>{{ treinamento.id_treinamento }}</td>
+            <td>
+              <a href="{{ url_for('treinamento.detalhes', id=treinamento.id_treinamento) }}">
+                {{ treinamento.disciplina }}
+              </a>
+            </td>
+            <td>{{ treinamento.carga_horaria }}</td>
+            <td>{{ treinamento.capacidade }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table> <p style="margin-top: 15px;">
+      <a href="{{ url_for('treinamento.criar') }}" class="btn btn-primary">Criar Novo Treinamento</a>
+    </p>
+
+  {% else %}
+    <p>Nenhum Treinamento cadastrado.</p>
+    <p>
+      <a href="{{ url_for('treinamento.criar') }}">Criar Novo Treinamento</a>
+    </p>
+  {% endif %}
+{% endblock %}

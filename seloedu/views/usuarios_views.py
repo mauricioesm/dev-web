@@ -5,6 +5,7 @@ from extensions import db
 
 def listar_usuarios():
     usuarios = Usuario.query.all()
+    print(usuarios)
     return render_template("usuario/index_usuario.html", usuarios=usuarios)
 
 

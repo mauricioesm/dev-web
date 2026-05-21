@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Usuário #{{ turma.id_turma }} - SELOEDU{% endblock %}
+
+{% block content %}
+  <h2>Detalhes do turma</h2>
+  <p><strong>ID:</strong> {{ turma.id_turma }}</p>
+  <p><strong>Quantidade de funcionários:</strong> {{ turma.qtd_funcionarios }}</p>
+
+
+  <p>
+    <a href="{{ url_for('turma.listar') }}">Voltar</a>
+  </p>
+
+  <p>
+    <a href="{{ url_for('turma.modificar', id=id_turma) }}"> Modificar </a>
+  </p>
+
+  <p>
+    <a href="{{ url_for('turma.deletar', id=id_turma) }}"> Deletar </a>
+  </p>
+
+  
+{% endblock %}

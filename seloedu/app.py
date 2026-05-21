@@ -4,11 +4,13 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from flask_login import current_user, login_required, logout_user
 from config import Config
 from extensions import db, login_manager, mail
-from models.usuario_models import Usuario
+from models import *
 
 from routes.auth_rotas import auth_bp
 from routes.usuarios_rotas import usuarios_bp
-
+from routes.treinamentos_rotas import treinamentos_bp
+from routes.funcionarios_rotas import funcionarios_bp
+from routes.turmas_rotas import turmas_bp
 
 app = Flask(__name__)
 Path(app.instance_path).mkdir(parents=True, exist_ok=True)
@@ -21,7 +23,9 @@ mail.init_app(app)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(usuarios_bp)
-
+app.register_blueprint(treinamentos_bp)
+app.register_blueprint(funcionarios_bp)
+app.register_blueprint(turmas_bp)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -86,6 +90,36 @@ with app.app_context():
         )
         master.set_password("123456")
         db.session.add(master)
+        db.session.commit()
+
+    if not Treinamento.query.filter_by(disciplina="Matematica").first():
+        treinamento = Treinamento(
+            id_treinamento = 0,
+            disciplina = "Matematica",
+            carga_horaria = 40,
+            capacidade = 40
+        )
+        db.session.add(treinamento)
+        db.session.commit()
+
+    if not Turma.query.first():
+        turma = Turma(
+            id_turma = 0,
+            id_treinamento =0,
+            qtd_funcionarios = 10
+        )
+        db.session.add(turma)
+        db.session.commit()
+
+    if not Funcionario.query.filter_by(email="funcionario@seloedu.com").first():
+        funcionario = Funcionario(
+            id_turma = 0,
+            id_funcionario = 0,
+            nome="Funcionario Master",
+            email="funcionario@seloedu.com",
+            funcao="Professor",
+        )
+        db.session.add(funcionario)
         db.session.commit()
 
 if __name__ == "__main__":

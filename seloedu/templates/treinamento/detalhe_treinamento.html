@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Usuário #{{ treinamento.id_treinamento }} - SELOEDU{% endblock %}
+
+{% block content %}
+  <h2>Detalhes do Treinamento</h2>
+  <p><strong>ID:</strong> {{ treinamento.id_treinamento }}</p>
+  <p><strong>Disciplina:</strong> {{ treinamento.disciplina }}</p>
+  <p><strong>Carga Horária:</strong> {{ treinamento.carga_horaria }}</p>
+  <p><strong>Capacidade:</strong> {{ treinamento.capacidade }}</p>
+
+  <p>
+    <a href="{{ url_for('treinamento.listar') }}">Voltar</a>
+  </p>
+
+  <p>
+    <a href="{{ url_for('treinamento.modificar', id=id_treinamento) }}"> Modificar </a>
+  </p>
+
+  <p>
+    <a href="{{ url_for('treinamento.deletar', id=id_treinamento) }}"> Deletar </a>
+  </p>
+
+  
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Funcionários - SELOEDU{% endblock %}
+
+{% block content %}
+  <h2>Funcionários</h2>
+
+  {% if funcionarios %}
+    <table border="1" cellpadding="6">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Função</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for funcionario in funcionarios %}
+          <tr>
+            <td>{{ funcionario.id_funcionario }}</td>
+            <td>
+              <a href="{{ url_for('funcionario.detalhes', id=funcionario.id_funcionario) }}">
+                {{ funcionario.nome }}
+              </a>
+            </td>
+            <td>{{ funcionario.email }}</td>
+            <td>{{ funcionario.funcao }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table> <p style="margin-top: 15px;">
+      <a href="{{ url_for('funcionario.criar') }}" class="btn btn-primary">Criar Novo Funcionário</a>
+    </p>
+
+  {% else %}
+    <p>Nenhum funcionário cadastrado.</p>
+    <p>
+      <a href="{{ url_for('funcionario.criar') }}">Criar Novo Funcionário</a>
+    </p>
+  {% endif %}
+{% endblock %}
