@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Treinamentos - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+  <div class="header-row">
+    <div>
+      <h1>Treinamentos</h1>
+      <p>Gerencie o catálogo de treinamentos disponíveis.</p>
+    </div>
+    <button type="button" class="primary-btn" data-open-modal="treinamentoModal">+ Novo Treinamento</button>
+  </div>
+
+  <div class="table-card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Início</th>
+          <th>Encerramento</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in treinamentos %}
+        <tr>
+          <td>{{ t.id }}</td>
+          <td>{{ t.titulo }}</td>
+          <td>{{ t.data_inicio.strftime('%d/%m/%Y') if t.data_inicio else '--' }}</td>
+          <td>{{ t.data_fim.strftime('%d/%m/%Y') if t.data_fim else '--' }}</td>
+          <td class="actions-cell">
+            <form method="POST" style="margin: 0;" onsubmit="return confirm('Deseja excluir este treinamento? Todas as turmas vinculadas a ele também serão apagadas.');">
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="treinamento_id" value="{{ t.id }}">
+              <button type="submit" class="btn-icon danger" title="Excluir">🗑️</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5">Nenhum treinamento cadastrado.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="treinamentoModal" class="modal-overlay" hidden>
+  <div class="modal-card">
+    <div class="card-header-inline">
+      <h3>Novo Treinamento</h3>
+      <button type="button" class="btn-icon" data-close-modal="treinamentoModal">✕</button>
+    </div>
+    <form method="POST">
+      <input type="hidden" name="action" value="create">
+      
+      <label>Título</label>
+      <input type="text" name="titulo" required>
+      
+      <label>Data de Início</label>
+      <input type="date" name="data_inicio">
+      
+      <label>Data de Encerramento</label>
+      <input type="date" name="data_fim">
+      
+      <div class="modal-actions">
+        <button type="button" class="btn-small" data-close-modal="treinamentoModal">Cancelar</button>
+        <button type="submit" class="primary-btn">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const openBtns = document.querySelectorAll('[data-open-modal]');
+  const closeBtns = document.querySelectorAll('[data-close-modal]');
+  openBtns.forEach(btn => btn.addEventListener('click', () => {
+    document.getElementById(btn.getAttribute('data-open-modal')).hidden = false;
+  }));
+  closeBtns.forEach(btn => btn.addEventListener('click', () => {
+    document.getElementById(btn.getAttribute('data-close-modal')).hidden = true;
+  }));
+</script>
+{% endblock %}

@@ -42,7 +42,14 @@
               <span>{{ (turma.data_fim or treinamento_selecionado.data_fim or turma.data_inicio or treinamento_selecionado.data_inicio).strftime('%d/%m/%Y') if (turma.data_fim or treinamento_selecionado.data_fim or turma.data_inicio or treinamento_selecionado.data_inicio) else '--/--/----' }}</span>
             </small>
           </span>
-          <a class="btn-small" href="{{ url_for('dashboard_alias', treinamento_id=treinamento_selecionado.id, turma_id=turma.id) }}">Ver funcionarios</a>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <a class="btn-small" href="{{ url_for('dashboard_alias', treinamento_id=treinamento_selecionado.id, turma_id=turma.id) }}">Ver funcionarios</a>
+            <form method="POST" action="{{ url_for('dashboard_alias') }}" style="margin: 0;" onsubmit="return confirm('Tem certeza que deseja excluir esta turma?');">
+                <input type="hidden" name="action" value="delete_turma">
+                <input type="hidden" name="turma_id" value="{{ turma.id }}">
+                <button type="submit" class="btn-icon danger" title="Excluir turma">🗑️</button>
+            </form>
+          </div>
         </li>
         {% else %}
         <li class="list-item"><span>Nenhuma turma criada ainda.</span></li>
@@ -101,7 +108,11 @@
       </ul>
 
       <div class="alunos-disponiveis-block">
-        <h3>Disponíveis</h3>
+        <div class="alunos-disponiveis-block">
+        <div class="card-header-inline">
+          <h3>Disponíveis</h3>
+          <button type="button" class="btn-small" data-open-modal="funcionarioModal">+ Novo</button>
+        </div>
         {% if turma_lotada %}
         <p class="muted">Turma lotada ({{ turma_selecionada.matriculados }}/{{ turma_selecionada.vagas }}). Remova alguém para liberar vaga.</p>
         {% elif turma_encerrada %}
@@ -126,6 +137,30 @@
       {% else %}
       <p class="muted">Selecione uma turma para visualizar funcionários.</p>
       {% endif %}
+      <div id="funcionarioModal" class="modal-overlay" hidden>
+      <div class="modal-card">
+        <div class="card-header-inline">
+          <h3>Cadastrar Funcionário</h3>
+          <button type="button" class="btn-icon" data-close-modal="funcionarioModal">✕</button>
+        </div>
+        <form method="POST" action="{{ url_for('dashboard_alias') }}">
+          <input type="hidden" name="action" value="create_funcionario">
+          <input type="hidden" name="treinamento_id" value="{{ treinamento_selecionado.id if treinamento_selecionado else '' }}">
+          <input type="hidden" name="turma_id" value="{{ turma_selecionada.id if turma_selecionada else '' }}">
+
+          <label>Nome do Funcionário</label>
+          <input type="text" name="nome" required>
+
+          <label>E-mail</label>
+          <input type="email" name="email" required>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-small" data-close-modal="funcionarioModal">Cancelar</button>
+            <button type="submit" class="primary-btn">Cadastrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
     </section>
   </div>
 </div>
