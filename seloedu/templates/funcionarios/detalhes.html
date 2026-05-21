@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Funcionario #{{ funcionario.id }} - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+  <div class="header-row">
+    <div>
+      <h1>{{ funcionario.nome }}</h1>
+      <p>{{ funcionario.cargo }}</p>
+    </div>
+    <div class="actions-cell">
+      <a class="btn-small" href="{{ url_for('funcionarios.listar') }}">Voltar</a>
+      <a class="primary-btn" href="{{ url_for('funcionarios.editar', id=funcionario.id) }}">Editar</a>
+    </div>
+  </div>
+
+  <section class="detail-card">
+    <p><strong>E-mail:</strong> {{ funcionario.email }}</p>
+    <p><strong>Telefone:</strong> {{ funcionario.telefone or '-' }}</p>
+    <p><strong>Status:</strong> {{ funcionario.status }}</p>
+    <p><strong>Data de admissao:</strong> {{ funcionario.data_admissao.strftime('%d/%m/%Y') if funcionario.data_admissao else '-' }}</p>
+  </section>
+</div>
+{% endblock %}

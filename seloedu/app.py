@@ -1,12 +1,19 @@
 import secrets
 from pathlib import Path
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, session, url_for
 from flask_login import current_user, login_required, logout_user
 from config import Config
 from extensions import db, login_manager, mail
+from models.funcionario_model import Funcionario
+from models.treinamento_model import Treinamento
+from models.turma_model import Turma
 from models.usuario_models import Usuario
 
 from routes.auth_rotas import auth_bp
+from routes.dashboard_rotas import dashboard_bp
+from routes.funcionarios_rotas import funcionarios_bp
+from routes.treinamentos_rotas import treinamentos_bp
+from routes.turmas_rotas import turmas_bp
 from routes.usuarios_rotas import usuarios_bp
 
 
@@ -20,6 +27,10 @@ login_manager.init_app(app)
 mail.init_app(app)
 
 app.register_blueprint(auth_bp)
+app.register_blueprint(dashboard_bp)
+app.register_blueprint(funcionarios_bp)
+app.register_blueprint(treinamentos_bp)
+app.register_blueprint(turmas_bp)
 app.register_blueprint(usuarios_bp)
 
 
@@ -50,27 +61,7 @@ def home():
 @app.route("/home")
 @login_required
 def home_alias():
-    return redirect(url_for("dashboard_alias"))
-
-
-@app.route("/dashboard", methods=["GET", "POST"])
-@login_required
-def dashboard_alias():
-    if request.method == "POST":
-        flash("Acao recebida no dashboard.", "info")
-        return redirect(url_for("dashboard_alias"))
-
-    return render_template(
-        "dashboard/dashboard.html",
-        treinamentos=[],
-        treinamento_selecionado=None,
-        turmas=[],
-        turma_selecionada=None,
-        funcionarios_da_turma=[],
-        funcionarios_disponiveis=[],
-        turma_lotada=False,
-        turma_encerrada=False,
-    )
+    return redirect(url_for("dashboard.index"))
 
 @app.route("/entrar")
 def login_alias():

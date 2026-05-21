@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Funcionarios - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="page-wrap funcionario-page">
+  <div class="header-row">
+    <div>
+      <h1>Funcionarios</h1>
+      <p>Gerencie colaboradores vinculados aos treinamentos.</p>
+    </div>
+    <a class="primary-btn" href="{{ url_for('funcionarios.criar') }}">Novo funcionario</a>
+  </div>
+
+  <form class="filter-form" method="GET">
+    <input type="search" name="q" placeholder="Buscar por nome, e-mail ou cargo" value="{{ busca }}">
+    <select name="status">
+      <option value="">Todos os status</option>
+      {% for item in status_choices %}
+      <option value="{{ item }}" {% if status == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn-small" type="submit">Filtrar</button>
+  </form>
+
+  <div class="table-card table-card-narrow">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Cargo</th>
+          <th>Status</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for funcionario in funcionarios %}
+        <tr>
+          <td>{{ funcionario.nome }}</td>
+          <td>{{ funcionario.email }}</td>
+          <td>{{ funcionario.cargo }}</td>
+          <td><span class="badge">{{ funcionario.status }}</span></td>
+          <td class="actions-cell">
+            <a class="btn-small" href="{{ url_for('funcionarios.detalhes', id=funcionario.id) }}">Ver</a>
+            <a class="btn-small" href="{{ url_for('funcionarios.editar', id=funcionario.id) }}">Editar</a>
+            <form class="inline-form" method="POST" action="{{ url_for('funcionarios.excluir', id=funcionario.id) }}" onsubmit="return confirm('Excluir este funcionario?');">
+              <button class="btn-small danger-btn" type="submit">Excluir</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">Nenhum funcionario cadastrado.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination-row">
+    {% if pagination.has_prev %}
+    <a class="btn-small" href="{{ url_for('funcionarios.listar', page=pagination.prev_num, q=busca, status=status) }}">Anterior</a>
+    {% endif %}
+    <span>Pagina {{ pagination.page }} de {{ pagination.pages }}</span>
+    {% if pagination.has_next %}
+    <a class="btn-small" href="{{ url_for('funcionarios.listar', page=pagination.next_num, q=busca, status=status) }}">Proxima</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

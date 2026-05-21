@@ -9,7 +9,7 @@ from utils.token_utils import confirm_token, generate_token
 
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("dashboard_alias"))
+        return redirect(url_for("dashboard.index"))
 
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
@@ -19,7 +19,7 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             session["app_run_id"] = current_app.config.get("APP_RUN_ID")
-            return redirect(url_for("dashboard_alias"))
+            return redirect(url_for("dashboard.index"))
 
         return render_template("auth/login.html", email=email, error="E-mail ou senha invalido."), 401
 

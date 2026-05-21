@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="form-wrap">
+  <h1>{{ title }}</h1>
+  <form method="POST" action="{{ action_url }}">
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" value="{{ form_data.nome }}" required>
+
+    <label for="email">E-mail</label>
+    <input id="email" type="email" name="email" value="{{ form_data.email }}" required>
+
+    <label for="funcao">Perfil</label>
+    <select id="funcao" name="funcao" required>
+      {% for item in funcao_choices %}
+      <option value="{{ item }}" {% if form_data.funcao == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="senha">Senha{% if usuario is defined %} nova{% endif %}</label>
+    <input id="senha" type="password" name="senha" {% if usuario is not defined %}required{% endif %}>
+    {% if usuario is defined %}
+    <p class="helper">Deixe em branco para manter a senha atual.</p>
+    {% endif %}
+
+    <div class="actions">
+      <a class="btn-small" href="{{ url_for('usuario.listar') }}">Cancelar</a>
+      <button type="submit">Salvar</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

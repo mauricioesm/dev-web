@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ treinamento.titulo }} - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+  <div class="header-row">
+    <div>
+      <h1>{{ treinamento.titulo }}</h1>
+      <p>{{ treinamento.carga_horaria }} horas - {{ treinamento.status }}</p>
+    </div>
+    <div class="actions-cell">
+      <a class="btn-small" href="{{ url_for('treinamentos.listar') }}">Voltar</a>
+      <a class="primary-btn" href="{{ url_for('treinamentos.editar', id=treinamento.id) }}">Editar</a>
+    </div>
+  </div>
+
+  <section class="detail-card">
+    <p><strong>Descricao:</strong> {{ treinamento.descricao or '-' }}</p>
+    <p><strong>Data de criacao:</strong> {{ treinamento.data_criacao.strftime('%d/%m/%Y') }}</p>
+    <p><strong>Turmas vinculadas:</strong> {{ treinamento.turmas|length }}</p>
+  </section>
+</div>
+{% endblock %}

@@ -23,12 +23,17 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
   background: radial-gradient(circle at top, #e7f7ee 0%, transparent 45%), var(--bg);
   color: var(--text);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .app-shell {
@@ -354,6 +359,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .content-inner {
@@ -376,7 +383,7 @@ a {
 }
 
 .container {
-  width: min(var(--max-width), 92vw);
+  width: min(var(--max-width), calc(100% - 32px));
   margin: 0 auto;
 }
 
@@ -922,6 +929,10 @@ textarea {
 @media (max-width: 720px) {
   .app-shell {
     grid-template-columns: 1fr;
+  }
+
+  .container {
+    width: min(100% - 24px, var(--max-width));
   }
 
   .sidebar {
