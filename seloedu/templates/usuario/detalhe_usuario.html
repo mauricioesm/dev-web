@@ -1,15 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Usuário #{{ usuario.id }} - SELOEDU{% endblock %}
+{% block title %}Usuario #{{ usuario.id }} - SELOEDU{% endblock %}
 
 {% block content %}
-  <h2>Detalhes do Usuário</h2>
-  <p><strong>ID:</strong> {{ usuario.id }}</p>
-  <p><strong>Nome:</strong> {{ usuario.nome }}</p>
-  <p><strong>Email:</strong> {{ usuario.email }}</p>
-  <p><strong>Papel:</strong> {{ usuario.funcao }}</p>
+<div class="detail-page">
+  <div class="header-row">
+    <div>
+      <h1>{{ usuario.nome }}</h1>
+      <p>{{ usuario.email }}</p>
+    </div>
+    <div class="actions-cell">
+      <a class="btn-small" href="{{ url_for('usuario.listar') }}">Voltar</a>
+      <a class="primary-btn" href="{{ url_for('usuario.editar', id=usuario.id) }}">Editar</a>
+    </div>
+  </div>
 
-  <p>
-    <a href="{{ url_for('usuario.listar') }}">Voltar</a>
-  </p>
+  <section class="detail-card">
+    <p><strong>ID:</strong> {{ usuario.id }}</p>
+    <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+    <p><strong>E-mail:</strong> {{ usuario.email }}</p>
+    <p><strong>Perfil:</strong> {{ usuario.funcao }}</p>
+  </section>
+</div>
 {% endblock %}

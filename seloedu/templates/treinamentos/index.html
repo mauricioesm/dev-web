@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Treinamentos - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="page-wrap treinamento-page">
+  <div class="header-row">
+    <div>
+      <h1>Treinamentos</h1>
+      <p>CRUD de programas e trilhas de capacitacao.</p>
+    </div>
+    <a class="primary-btn" href="{{ url_for('treinamentos.criar') }}">Novo treinamento</a>
+  </div>
+
+  <form class="filter-form" method="GET">
+    <input type="search" name="q" placeholder="Buscar por titulo ou descricao" value="{{ busca }}">
+    <select name="status">
+      <option value="">Todos os status</option>
+      {% for item in status_choices %}
+      <option value="{{ item }}" {% if status == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn-small" type="submit">Filtrar</button>
+  </form>
+
+  <div class="table-card table-card-narrow">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Titulo</th>
+          <th>Carga horaria</th>
+          <th>Status</th>
+          <th>Data de criacao</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for treinamento in treinamentos %}
+        <tr>
+          <td>{{ treinamento.titulo }}</td>
+          <td>{{ treinamento.carga_horaria }}h</td>
+          <td><span class="badge">{{ treinamento.status }}</span></td>
+          <td>{{ treinamento.data_criacao.strftime('%d/%m/%Y') }}</td>
+          <td class="actions-cell">
+            <a class="btn-small" href="{{ url_for('treinamentos.detalhes', id=treinamento.id) }}">Ver</a>
+            <a class="btn-small" href="{{ url_for('treinamentos.editar', id=treinamento.id) }}">Editar</a>
+            <form class="inline-form" method="POST" action="{{ url_for('treinamentos.excluir', id=treinamento.id) }}" onsubmit="return confirm('Excluir este treinamento? Turmas relacionadas tambem serao removidas.');">
+              <button class="btn-small danger-btn" type="submit">Excluir</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">Nenhum treinamento cadastrado.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination-row">
+    {% if pagination.has_prev %}
+    <a class="btn-small" href="{{ url_for('treinamentos.listar', page=pagination.prev_num, q=busca, status=status) }}">Anterior</a>
+    {% endif %}
+    <span>Pagina {{ pagination.page }} de {{ pagination.pages }}</span>
+    {% if pagination.has_next %}
+    <a class="btn-small" href="{{ url_for('treinamentos.listar', page=pagination.next_num, q=busca, status=status) }}">Proxima</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

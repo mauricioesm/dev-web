@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="form-wrap">
+  <h1>{{ title }}</h1>
+  <form method="POST" action="{{ action_url }}">
+    <label for="titulo">Titulo</label>
+    <input id="titulo" name="titulo" value="{{ form_data.titulo }}" required>
+
+    <label for="descricao">Descricao</label>
+    <textarea id="descricao" name="descricao" rows="5">{{ form_data.descricao }}</textarea>
+
+    <label for="carga_horaria">Carga horaria</label>
+    <input id="carga_horaria" type="number" min="1" name="carga_horaria" value="{{ form_data.carga_horaria }}" required>
+
+    <label for="status">Status</label>
+    <select id="status" name="status">
+      {% for item in status_choices %}
+      <option value="{{ item }}" {% if form_data.status == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+
+    <div class="actions">
+      <a class="btn-small" href="{{ url_for('treinamentos.listar') }}">Cancelar</a>
+      <button type="submit">Salvar</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
