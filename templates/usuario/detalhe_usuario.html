@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Usuário #{{ usuario.id }} - SELOEDU{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>Detalhes do Usuário</h2>
+    <p>Visualize os dados do usuário e acesse ações de edição.</p>
+  </div>
+
+  <section class="card">
+    <dl class="detail-list">
+      <dt>ID</dt>
+      <dd>{{ usuario.id }}</dd>
+      <dt>Nome</dt>
+      <dd>{{ usuario.nome }}</dd>
+      <dt>Email</dt>
+      <dd>{{ usuario.email }}</dd>
+      <dt>Papel</dt>
+      <dd>{{ usuario.funcao }}</dd>
+    </dl>
+
+    <div class="card-actions">
+      <a class="btn-small" href="{{ url_for('usuario.listar') }}">Voltar</a>
+      <a class="btn-small" href="{{ url_for('usuario.editar', id=usuario.id) }}">Editar</a>
+      <form method="POST" action="{{ url_for('usuario.excluir', id=usuario.id) }}" class="inline-form">
+        <button type="submit" class="btn-small danger-btn">Excluir</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}

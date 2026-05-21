@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Funcionário - {{ funcionario.nome }}{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>{{ funcionario.nome }}</h2>
+    <p>Detalhes do funcionário.</p>
+  </div>
+
+  <section class="card">
+    <dl class="detail-list">
+      <dt>ID</dt>
+      <dd>{{ funcionario.id }}</dd>
+      <dt>E-mail</dt>
+      <dd>{{ funcionario.email }}</dd>
+      <dt>Cargo</dt>
+      <dd>{{ funcionario.cargo or '-' }}</dd>
+      <dt>Telefone</dt>
+      <dd>{{ funcionario.telefone or '-' }}</dd>
+      <dt>Turmas vinculadas</dt>
+      <dd>{{ funcionario.turmas|length }}</dd>
+    </dl>
+    <div class="card-actions">
+      <a class="btn-small" href="{{ url_for('funcionario.listar') }}">Voltar</a>
+      <a class="btn-small" href="{{ url_for('funcionario.editar', id=funcionario.id) }}">Editar</a>
+    </div>
+  </section>
+{% endblock %}

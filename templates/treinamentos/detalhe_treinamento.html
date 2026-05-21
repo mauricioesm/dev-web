@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}{{ treinamento.titulo }} - Treinamento{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>{{ treinamento.titulo }}</h2>
+    <p>{{ treinamento.descricao or 'Sem descrição cadastrada.' }}</p>
+  </div>
+
+  <section class="card">
+    <div class="card-actions">
+      <a class="btn-small" href="{{ url_for('treinamento.listar') }}">Voltar</a>
+      <a class="btn-small" href="{{ url_for('treinamento.editar', id=treinamento.id) }}">Editar treinamento</a>
+    </div>
+    <dl class="detail-list">
+      <dt>Local</dt>
+      <dd>{{ treinamento.local or '-' }}</dd>
+      <dt>Período</dt>
+      <dd>
+        {% if treinamento.data_inicio %}{{ treinamento.data_inicio.strftime('%d/%m/%Y') }}{% else %}-{% endif %}
+        a
+        {% if treinamento.data_fim %}{{ treinamento.data_fim.strftime('%d/%m/%Y') }}{% else %}-{% endif %}
+      </dd>
+      <dt>Turmas</dt>
+      <dd>{{ treinamento.turmas|length }}</dd>
+    </dl>
+  </section>
+
+  <section class="card">
+    <h3>Turmas do treinamento</h3>
+    {% if turmas %}
+      <table class="table-list">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Vagas</th>
+            <th>Matriculados</th>
+            <th>Período</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for turma in turmas %}
+          <tr>
+            <td>{{ turma.id }}</td>
+            <td>{{ turma.titulo }}</td>
+            <td>{{ turma.vagas }}</td>
+            <td>{{ turma.matriculados }}</td>
+            <td>
+              {% if turma.data_inicio %}{{ turma.data_inicio.strftime('%d/%m/%Y') }}{% else %}-{% endif %}
+              a
+              {% if turma.data_fim %}{{ turma.data_fim.strftime('%d/%m/%Y') }}{% else %}-{% endif %}
+            </td>
+            <td>
+              <form method="POST" action="{{ url_for('treinamento.excluir_turma', id=turma.id) }}" class="inline-form">
+                <button type="submit" class="btn-small danger-btn">Excluir turma</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>Nenhuma turma criada para este treinamento.</p>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <h3>Criar turma</h3>
+    <form method="POST" action="{{ url_for('treinamento.criar_turma', id=treinamento.id) }}" class="form-stack">
+      <label>Título da turma</label>
+      <input name="titulo" type="text" value="Turma {{ turmas|length + 1 }}" required>
+      <label>Vagas</label>
+      <input name="vagas" type="number" min="1" value="20" required>
+      <div class="form-row">
+        <label>Início</label>
+        <input name="data_inicio" type="date" value="{{ treinamento.data_inicio.strftime('%Y-%m-%d') if treinamento.data_inicio else '' }}">
+        <label>Fim</label>
+        <input name="data_fim" type="date" value="{{ treinamento.data_fim.strftime('%Y-%m-%d') if treinamento.data_fim else '' }}">
+      </div>
+      <button class="primary-btn" type="submit">Criar turma</button>
+    </form>
+  </section>
+{% endblock %}

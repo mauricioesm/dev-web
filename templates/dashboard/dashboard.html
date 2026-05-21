@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Coordenador{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrap">
+  <div class="dashboard-title">
+    <h1>Painel de Gerenciamento</h1>
+    <p>Gerencie treinamentos, turmas e funcionários em um só lugar.</p>
+  </div>
+
+  <div class="dashboard-grid">
+    <section class="dashboard-card">
+      <h2>Treinamentos ativos ({{ treinamentos|length }})</h2>
+      <ul class="list-stack">
+        {% for treinamento in treinamentos %}
+        <li class="list-item {{ 'active' if treinamento_selecionado and treinamento_selecionado.id == treinamento.id else '' }}">
+          <span>{{ treinamento.titulo }}</span>
+          <a class="btn-small" href="{{ url_for('dashboard_alias', treinamento_id=treinamento.id) }}">Ver turmas</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="dashboard-card">
+      <div class="card-header-inline">
+        <h2>Turmas</h2>
+        {% if treinamento_selecionado %}
+        <button type="button" class="btn-small" data-open-modal="turmaModal">+ Criar turma</button>
+        {% endif %}
+      </div>
+
+      {% if treinamento_selecionado %}
+      <ul class="list-stack">
+        {% for turma in turmas %}
+        <li class="list-item {{ 'active' if turma_selecionada and turma_selecionada.id == turma.id else '' }}">
+          <span class="turma-info">
+            Turma {{ loop.index }} ({{ turma.matriculados }}/{{ turma.vagas }})
+            <small class="turma-periodo">
+              <span class="period-head">Inicio</span>
+              <span class="period-head">Termino</span>
+              <span>{{ (turma.data_inicio or treinamento_selecionado.data_inicio).strftime('%d/%m/%Y') if (turma.data_inicio or treinamento_selecionado.data_inicio) else '--/--/----' }}</span>
+              <span>{{ (turma.data_fim or treinamento_selecionado.data_fim or turma.data_inicio or treinamento_selecionado.data_inicio).strftime('%d/%m/%Y') if (turma.data_fim or treinamento_selecionado.data_fim or turma.data_inicio or treinamento_selecionado.data_inicio) else '--/--/----' }}</span>
+            </small>
+          </span>
+          <a class="btn-small" href="{{ url_for('dashboard_alias', treinamento_id=treinamento_selecionado.id, turma_id=turma.id) }}">Ver funcionarios</a>
+        </li>
+        {% else %}
+        <li class="list-item"><span>Nenhuma turma criada ainda.</span></li>
+        {% endfor %}
+      </ul>
+
+      <div id="turmaModal" class="modal-overlay" hidden>
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+          <div class="card-header-inline">
+            <h3 id="modalTitle">Criar turma</h3>
+            <button type="button" class="btn-icon" data-close-modal="turmaModal">✕</button>
+          </div>
+          <form method="POST" action="{{ url_for('dashboard_alias') }}">
+            <input type="hidden" name="action" value="create_turma">
+            <input type="hidden" name="treinamento_id" value="{{ treinamento_selecionado.id }}">
+
+            <label for="vagas">Vagas</label>
+            <input id="vagas" type="number" name="vagas" min="1" value="20" required>
+
+            <label for="data_inicio">Data de início</label>
+            <input id="data_inicio" type="date" name="data_inicio" value="{{ treinamento_selecionado.data_inicio.strftime('%Y-%m-%d') if treinamento_selecionado and treinamento_selecionado.data_inicio else '' }}" required>
+
+            <label for="data_fim">Data de encerramento</label>
+            <input id="data_fim" type="date" name="data_fim" value="{{ treinamento_selecionado.data_fim.strftime('%Y-%m-%d') if treinamento_selecionado and treinamento_selecionado.data_fim else '' }}" required>
+
+            <div class="modal-actions">
+              <button type="button" class="btn-small" data-close-modal="turmaModal">Cancelar</button>
+              <button type="submit" class="primary-btn">Criar turma</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <p class="muted">Selecione um treinamento para visualizar e criar turmas.</p>
+      {% endif %}
+    </section>
+
+    <section class="dashboard-card alunos-card">
+      <h2>Funcionarios da turma</h2>
+      {% if turma_selecionada %}
+      <h3>Vinculados</h3>
+      <ul class="list-stack compact-list">
+        {% for funcionario in funcionarios_da_turma %}
+        <li class="list-item with-action">
+          <span>{{ funcionario.nome }} ({{ funcionario.email }})</span>
+          <form method="POST" action="{{ url_for('dashboard_alias') }}" class="inline-form">
+            <input type="hidden" name="action" value="remove_funcionario">
+            <input type="hidden" name="turma_id" value="{{ turma_selecionada.id }}">
+            <input type="hidden" name="funcionario_id" value="{{ funcionario.id }}">
+            <button type="submit" class="btn-icon danger" title="Remover da turma">−</button>
+          </form>
+        </li>
+        {% else %}
+        <li class="list-item"><span>Nenhum funcionário vinculado.</span></li>
+        {% endfor %}
+      </ul>
+
+      <div class="alunos-disponiveis-block">
+        <h3>Disponíveis</h3>
+        {% if turma_lotada %}
+        <p class="muted">Turma lotada ({{ turma_selecionada.matriculados }}/{{ turma_selecionada.vagas }}). Remova alguém para liberar vaga.</p>
+        {% elif turma_encerrada %}
+        <p class="muted">Turma encerrada em {{ turma_selecionada.data_fim.strftime('%d/%m/%Y') }}. Não é possível adicionar novos funcionários.</p>
+        {% endif %}
+        <ul class="list-stack compact-list alunos-disponiveis-list">
+          {% for funcionario in funcionarios_disponiveis %}
+          <li class="list-item with-action">
+            <span>{{ funcionario.nome }} ({{ funcionario.email }})</span>
+            <form method="POST" action="{{ url_for('dashboard_alias') }}" class="inline-form">
+              <input type="hidden" name="action" value="add_funcionario">
+              <input type="hidden" name="turma_id" value="{{ turma_selecionada.id }}">
+              <input type="hidden" name="funcionario_id" value="{{ funcionario.id }}">
+              <button type="submit" class="btn-icon success" title="Adicionar na turma" {% if turma_lotada or turma_encerrada %}disabled{% endif %}>+</button>
+            </form>
+          </li>
+          {% else %}
+          <li class="list-item"><span>Nenhum funcionário cadastrado.</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% else %}
+      <p class="muted">Selecione uma turma para visualizar funcionários.</p>
+      {% endif %}
+    </section>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const openButtons = document.querySelectorAll('[data-open-modal]');
+    const closeButtons = document.querySelectorAll('[data-close-modal]');
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.hidden = false;
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.hidden = true;
+    }
+
+    openButtons.forEach((btn) => {
+      btn.addEventListener('click', () => openModal(btn.getAttribute('data-open-modal')));
+    });
+
+    closeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => closeModal(btn.getAttribute('data-close-modal')));
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (target.classList.contains('modal-overlay')) {
+        target.hidden = true;
+      }
+    });
+  })();
+</script>
+{% endblock %}

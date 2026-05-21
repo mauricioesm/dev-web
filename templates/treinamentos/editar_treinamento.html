@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Treinamento - {{ treinamento.titulo }}{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>Editar Treinamento</h2>
+    <p>Altere os dados do treinamento e salve as mudanças.</p>
+  </div>
+
+  <section class="card">
+    <form method="POST" action="{{ url_for('treinamento.editar', id=treinamento.id) }}" class="form-stack">
+      <label>Título</label>
+      <input name="titulo" type="text" value="{{ treinamento.titulo }}" required>
+
+      <label>Descrição</label>
+      <textarea name="descricao">{{ treinamento.descricao or '' }}</textarea>
+
+      <label>Local</label>
+      <input name="local" type="text" value="{{ treinamento.local or '' }}">
+
+      <div class="form-row">
+        <label>Data de início</label>
+        <input name="data_inicio" type="date" value="{{ treinamento.data_inicio.strftime('%Y-%m-%d') if treinamento.data_inicio else '' }}">
+        <label>Data de fim</label>
+        <input name="data_fim" type="date" value="{{ treinamento.data_fim.strftime('%Y-%m-%d') if treinamento.data_fim else '' }}">
+      </div>
+
+      <div class="card-actions">
+        <a class="btn-small" href="{{ url_for('treinamento.detalhes', id=treinamento.id) }}">Cancelar</a>
+        <button class="primary-btn" type="submit">Salvar alterações</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}

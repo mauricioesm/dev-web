@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Funcionário - {{ funcionario.nome }}{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>Editar Funcionário</h2>
+  </div>
+
+  <section class="card">
+    <form method="POST" action="{{ url_for('funcionario.editar', id=funcionario.id) }}" class="form-stack">
+      <label>Nome</label>
+      <input name="nome" type="text" value="{{ funcionario.nome }}" required>
+      <label>E-mail</label>
+      <input name="email" type="email" value="{{ funcionario.email }}" required>
+      <label>Cargo</label>
+      <input name="cargo" type="text" value="{{ funcionario.cargo or '' }}">
+      <label>Telefone</label>
+      <input name="telefone" type="text" value="{{ funcionario.telefone or '' }}">
+      <div class="card-actions">
+        <a class="btn-small" href="{{ url_for('funcionario.detalhes', id=funcionario.id) }}">Cancelar</a>
+        <button class="primary-btn" type="submit">Salvar alterações</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}

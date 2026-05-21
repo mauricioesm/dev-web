@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Treinamentos - SELOEDU{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>Treinamentos</h2>
+    <p>Gerencie os treinamentos, visualize turmas e exclua registros.</p>
+  </div>
+
+  <section class="card">
+    <h3>Novo Treinamento</h3>
+    <form method="POST" action="{{ url_for('treinamento.listar') }}" class="form-stack">
+      <label>Título</label>
+      <input name="titulo" type="text" required>
+
+      <label>Descrição</label>
+      <textarea name="descricao"></textarea>
+
+      <label>Local</label>
+      <input name="local" type="text">
+
+      <div class="form-row">
+        <label>Início</label>
+        <input name="data_inicio" type="date">
+        <label>Fim</label>
+        <input name="data_fim" type="date">
+      </div>
+
+      <button class="primary-btn" type="submit">Criar treinamento</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h3>Treinamentos cadastrados</h3>
+    {% if treinamentos %}
+      <table class="table-list">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Período</th>
+            <th>Local</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for treinamento in treinamentos %}
+          <tr>
+            <td>{{ treinamento.id }}</td>
+            <td><a href="{{ url_for('treinamento.detalhes', id=treinamento.id) }}">{{ treinamento.titulo }}</a></td>
+            <td>
+              {% if treinamento.data_inicio %}{{ treinamento.data_inicio.strftime('%d/%m/%Y') }}{% else %}-{% endif %}
+              &ndash;
+              {% if treinamento.data_fim %}{{ treinamento.data_fim.strftime('%d/%m/%Y') }}{% else %}-{% endif %}
+            </td>
+            <td>{{ treinamento.local or '-' }}</td>
+            <td>
+              <a class="btn-small" href="{{ url_for('treinamento.editar', id=treinamento.id) }}">Editar</a>
+              <form method="POST" action="{{ url_for('treinamento.excluir', id=treinamento.id) }}" class="inline-form">
+                <button type="submit" class="btn-small danger-btn">Excluir</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>Nenhum treinamento cadastrado.</p>
+    {% endif %}
+  </section>
+{% endblock %}

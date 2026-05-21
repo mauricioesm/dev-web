@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Funcionários - SELOEDU{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>Funcionários</h2>
+    <p>Cadastre e gerencie funcionários que serão alocados em turmas.</p>
+  </div>
+
+  <section class="card">
+    <h3>Novo Funcionário</h3>
+    <form method="POST" action="{{ url_for('funcionario.novo') }}" class="form-stack">
+      <label>Nome</label>
+      <input name="nome" type="text" required>
+      <label>E-mail</label>
+      <input name="email" type="email" required>
+      <label>Cargo</label>
+      <input name="cargo" type="text">
+      <label>Telefone</label>
+      <input name="telefone" type="text">
+      <button class="primary-btn" type="submit">Cadastrar funcionário</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h3>Lista de funcionários</h3>
+    {% if funcionarios %}
+      <table class="table-list">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Cargo</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for funcionario in funcionarios %}
+          <tr>
+            <td>{{ funcionario.id }}</td>
+            <td><a href="{{ url_for('funcionario.detalhes', id=funcionario.id) }}">{{ funcionario.nome }}</a></td>
+            <td>{{ funcionario.email }}</td>
+            <td>{{ funcionario.cargo or '-' }}</td>
+            <td>
+              <a class="btn-small" href="{{ url_for('funcionario.editar', id=funcionario.id) }}">Editar</a>
+              <form method="POST" action="{{ url_for('funcionario.excluir', id=funcionario.id) }}" class="inline-form">
+                <button type="submit" class="btn-small danger-btn">Excluir</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>Nenhum funcionário cadastrado.</p>
+    {% endif %}
+  </section>
+{% endblock %}

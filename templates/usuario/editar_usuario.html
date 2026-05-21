@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Usuário - {{ usuario.nome }}{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>Editar usuário</h2>
+  </div>
+
+  <section class="card">
+    <form method="POST" action="{{ url_for('usuario.editar', id=usuario.id) }}" class="form-stack">
+      <label>Nome</label>
+      <input name="nome" type="text" value="{{ usuario.nome }}" required>
+
+      <label>E-mail</label>
+      <input name="email" type="email" value="{{ usuario.email }}" required>
+
+      <label>Função</label>
+      <input name="funcao" type="text" value="{{ usuario.funcao }}" required>
+
+      <label>Senha (deixe em branco para manter)</label>
+      <input name="senha" type="password">
+
+      <div class="card-actions">
+        <a class="btn-small" href="{{ url_for('usuario.detalhes', id=usuario.id) }}">Cancelar</a>
+        <button class="primary-btn" type="submit">Salvar alterações</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}
