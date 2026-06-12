@@ -1,32 +1,42 @@
 {% extends "base.html" %}
-
 {% block title %}Usuários - SELOEDU{% endblock %}
 
 {% block content %}
+<div class="page-header">
   <h2>Usuários</h2>
+  <a href="{{ url_for('usuario.novo') }}" class="primary-btn">+ Novo usuário</a>
+</div>
 
-  {% if usuarios %}
-    <table border="1" cellpadding="6">
+{% if usuarios %}
+  <div class="table-wrap">
+    <table class="data-table">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Nome</th>
-          <th>Email</th>
-          <th>Papel</th>
+          <th>E-mail</th>
+          <th>Perfil</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
-        {% for usuario in usuarios %}
-          <tr>
-            <td>{{ usuario.id }}</td>
-            <td><a href="{{ url_for('usuario.detalhes', id=usuario.id) }}">{{ usuario.nome }}</a></td>
-            <td>{{ usuario.email }}</td>
-            <td>{{ usuario.funcao }}</td>
-          </tr>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ u.nome }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.funcao | capitalize }}</td>
+          <td class="row-actions">
+            <a class="btn-small" href="{{ url_for('usuario.editar', id=u.id) }}">Editar</a>
+            <form method="POST" action="{{ url_for('usuario.excluir', id=u.id) }}" class="inline-form"
+                  onsubmit="return confirm('Excluir o usuário {{ u.nome | e }}?')">
+              <button type="submit" class="btn-small danger">Excluir</button>
+            </form>
+          </td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
-  {% else %}
-    <p>Nenhum usuário cadastrado.</p>
-  {% endif %}
+  </div>
+{% else %}
+  <p class="muted">Nenhum usuário cadastrado.</p>
+{% endif %}
 {% endblock %}

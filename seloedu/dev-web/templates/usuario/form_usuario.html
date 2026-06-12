@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if usuario else 'Novo' }} Usuário - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <h2>{{ 'Editar' if usuario else 'Novo' }} usuário</h2>
+
+  <form method="POST" class="form-stack">
+    <div class="input-group">
+      <label for="nome">Nome completo</label>
+      <input id="nome" type="text" name="nome"
+             value="{{ usuario.nome if usuario else '' }}" required>
+    </div>
+
+    <div class="input-group">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" name="email"
+             value="{{ usuario.email if usuario else '' }}" required>
+    </div>
+
+    <div class="input-group">
+      <label for="funcao">Perfil</label>
+      <select id="funcao" name="funcao">
+        {% set opcoes = ['master', 'direcao', 'coordenador', 'administrativo'] %}
+        {% for op in opcoes %}
+          <option value="{{ op }}" {{ 'selected' if usuario and usuario.funcao == op else '' }}>
+            {{ op | capitalize }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="senha">{{ 'Nova senha (deixe vazio para manter)' if usuario else 'Senha' }}</label>
+      <input id="senha" type="password" name="senha" {{ 'required' if not usuario else '' }}>
+    </div>
+
+    <div class="form-actions">
+      <a class="btn-small" href="{{ url_for('usuario.listar') }}">Cancelar</a>
+      <button type="submit" class="primary-btn">{{ 'Salvar' if usuario else 'Criar' }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

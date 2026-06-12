@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if treinamento else 'Novo' }} Treinamento - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <h2>{{ 'Editar' if treinamento else 'Novo' }} treinamento</h2>
+
+  <form method="POST" class="form-stack">
+    <div class="input-group">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" name="titulo"
+             value="{{ treinamento.titulo if treinamento else '' }}" required>
+    </div>
+
+    <div class="input-group">
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" name="descricao" rows="4">{{ treinamento.descricao if treinamento else '' }}</textarea>
+    </div>
+
+    <div class="input-group">
+      <label for="data_inicio">Data de início</label>
+      <input id="data_inicio" type="date" name="data_inicio"
+             value="{{ treinamento.data_inicio.strftime('%Y-%m-%d') if treinamento and treinamento.data_inicio else '' }}">
+    </div>
+
+    <div class="input-group">
+      <label for="data_fim">Data de encerramento</label>
+      <input id="data_fim" type="date" name="data_fim"
+             value="{{ treinamento.data_fim.strftime('%Y-%m-%d') if treinamento and treinamento.data_fim else '' }}">
+    </div>
+
+    <div class="form-actions">
+      <a class="btn-small" href="{{ url_for('treinamento.listar') }}">Cancelar</a>
+      <button type="submit" class="primary-btn">{{ 'Salvar' if treinamento else 'Criar' }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
