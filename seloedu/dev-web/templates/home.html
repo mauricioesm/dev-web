@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}SELOEDU{% endblock %}
+{% block content %}
+<div class="home-wrapper">
+  <section class="public-home">
+    <section class="public-hero">
+      <div class="public-hero-copy">
+        <span class="public-kicker">Plataforma de treinamentos</span>
+        <h1>SELOEDU</h1>
+        <p class="public-lead">
+          Organize treinamentos, turmas e colaboradores em um fluxo simples para a coordenação pedagógica.
+        </p>
+        <div class="public-hero-actions">
+          <a class="primary-btn" href="{{ url_for('auth.login') }}">Acessar painel</a>
+          <!--<a class="ghost-btn" href="{{ url_for('auth.forgot_password') }}">Recuperar senha</a>-->
+        </div>
+      </div>
+      <div class="public-overview">
+        <h2>Gestão em um único painel</h2>
+        <ul class="public-overview-list">
+          <li class="public-overview-item">
+            <strong>Treinamentos</strong>
+            <span>Planejamento e acompanhamento de trilhas ativas.</span>
+          </li>
+          <li class="public-overview-item">
+            <strong>Turmas</strong>
+            <span>Controle de vagas, período e status de cada turma.</span>
+          </li>
+          <li class="public-overview-item">
+            <strong>Colaboradores</strong>
+            <span>Vinculação rápida por turma com acompanhamento contínuo.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="public-home-features">
+      <article class="feature-tile">
+        <h3>Fluxo claro</h3>
+        <p>Da abertura de turma ao acompanhamento de presença, tudo no mesmo lugar.</p>
+      </article>
+      <article class="feature-tile">
+        <h3>Interface objetiva</h3>
+        <p>Navegação focada em tarefas recorrentes de coordenação e gestão.</p>
+      </article>
+      <article class="feature-tile">
+        <h3>Pronto para uso</h3>
+        <p>Acesse com seu usuário institucional e inicie o acompanhamento das equipes.</p>
+      </article>
+    </section>
+  </section>
+</div>
+{% endblock %}

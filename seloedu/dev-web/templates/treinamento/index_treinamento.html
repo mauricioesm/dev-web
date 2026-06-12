@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Treinamentos - SELOEDU{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Treinamentos</h2>
+  <a href="{{ url_for('treinamento.novo') }}" class="primary-btn">+ Novo treinamento</a>
+</div>
+
+{% if treinamentos %}
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Início</th>
+          <th>Encerramento</th>
+          <th>Turmas</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in treinamentos %}
+        <tr>
+          <td>{{ t.titulo }}</td>
+          <td>{{ t.data_inicio.strftime('%d/%m/%Y') if t.data_inicio else '—' }}</td>
+          <td>{{ t.data_fim.strftime('%d/%m/%Y') if t.data_fim else '—' }}</td>
+          <td>{{ t.turmas | length }}</td>
+          <td class="row-actions">
+            <a class="btn-small" href="{{ url_for('treinamento.editar', id=t.id) }}">Editar</a>
+            <form method="POST" action="{{ url_for('treinamento.excluir', id=t.id) }}" class="inline-form"
+                  onsubmit="return confirm('Excluir o treinamento {{ t.titulo | e }} e todas as suas turmas?')">
+              <button type="submit" class="btn-small danger">Excluir</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="muted">Nenhum treinamento cadastrado. <a href="{{ url_for('treinamento.novo') }}">Criar o primeiro</a>.</p>
+{% endif %}
+{% endblock %}
